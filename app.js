@@ -43,6 +43,16 @@ app.use(function(req, res, next) {
     next();
 });
 
+// Finalizar sesion por tiempo
+app.use(function(req, res, next) {
+    var time = new Date().getTime();
+    if(req.session.lastTime && time-req.session.lastTime>120000) {
+        delete req.session.user;
+    }
+    req.session.lastTime = time;
+    next();
+});
+
 app.use('/', routes);
 
 
